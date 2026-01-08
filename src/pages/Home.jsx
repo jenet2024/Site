@@ -31,7 +31,7 @@ export default function Home() {
     }).addTo(m);
 
     // --- 2) Récupération des parkings depuis PHP ---
-    fetch("/https://juju.rf.gd/parkings.php")
+    fetch("https://juju.rf.gd/parkings.php")
       .then((r) => r.json())
       .then((data) => {
         setParkings(data);

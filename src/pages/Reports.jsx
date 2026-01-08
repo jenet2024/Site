@@ -31,7 +31,7 @@ export default function Reports() {
 
   // 📌 Charger les parkings depuis parkings.php au chargement du composant
   useEffect(() => {
-    fetch("http://juju.rf.gd/backend/parkings.php")
+    fetch("https://juju.rf.gd/backend/parkings.php")
       .then((r) => r.json())
       .then((data) => setParkings(data)) // On stocke les parkings en état
       .catch((err) => console.error("Erreur:", err));
@@ -67,7 +67,7 @@ export default function Reports() {
 
     try {
       // POST vers reports_api.php
-      const res = await fetch("http://juju.rf.gd/backend/parking_app/reports_api.php", {
+      const res = await fetch("https://juju.rf.gd/backend/parking_app/reports_api.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -95,7 +95,7 @@ export default function Reports() {
   // 📌 Fonction pour charger tous les signalements depuis le backend
   const loadReports = async () => {
     try {
-      const res = await fetch("http://juju.rf.gd/backend/parking_app/reports_api.php", {
+      const res = await fetch("https://juju.rf.gd/backend/parking_app/reports_api.php", {
         credentials: "include",
       });
       const data = await res.json();
