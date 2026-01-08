@@ -1,0 +1,39 @@
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.card-maintenance {
+  padding: 15px;
+  border-radius: 12px;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-maintenance:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+}
+
+/* ✅ Couleurs */
+.card-maintenance.green {
+  background-color: #28a745; /* vert pour capteur OK */
+}
+
+.card-maintenance.orange-dark {
+  background-color: #cc5500; /* orange foncé pour capteur défaillant */
+}
+
+.card-maintenance.grey {
+  background-color: #6c757d; /* gris si données indisponibles */
+}
+
+.mini-desc {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.85em;
+  opacity: 0.9;
+}

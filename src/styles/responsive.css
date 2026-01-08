@@ -1,0 +1,120 @@
+/* === Styles généraux === */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px;
+}
+
+/* === Cartes === */
+.card {
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* === Boutons === */
+.btn-primary,
+.btn-danger {
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+.btn-danger {
+  background-color: #ff4d4d; /* rouge plus clair */
+  color: white;
+  border: none;
+}
+
+/* === Flex row pour aligner liste + input + bouton === */
+.flex-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* === Auth card === */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.auth-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  width: 400px;
+  max-width: 100%;
+}
+
+.auth-form .field {
+  margin-bottom: 15px;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* === Responsive tablette === */
+@media (max-width: 768px) {
+  .flex-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .auth-card {
+    width: 100%;
+  }
+
+  .auth-form button {
+    margin-top: 10px;
+  }
+}
+
+/* === Responsive mobile === */
+@media (max-width: 480px) {
+  h1, h2 {
+    font-size: 1.2em;
+  }
+
+  .btn-primary,
+  .btn-danger {
+    width: 100%;
+    padding: 12px;
+    font-size: 1em;
+  }
+
+  .card {
+    padding: 10px;
+  }
+
+  input, select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .auth-card {
+    padding: 15px;
+  }
+}
