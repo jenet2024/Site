@@ -33,7 +33,7 @@ export default function Auth() {
       console.log("Payload envoyé:", payload);
 
       // Envoi des infos au backend PHP
-      const res = await fetch("http://localhost/backend/parking_app/login.php", {
+      const res = await fetch("http://juju.rf.gd/backend/parking_app/login.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload), // conversion en JSON

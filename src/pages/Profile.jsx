@@ -21,7 +21,7 @@ export default function Profile() {
     if (!userId) return;
 
     // Appel au backend pour obtenir les informations de l'utilisateur
-    fetch(`http://localhost/backend/parking_app/get_profile.php?user_id=${userId}`)
+    fetch(`http://juju.rf.gd/backend/parking_app/get_profile.php?user_id=${userId}`)
       .then(res => res.json()) // conversion JSON
       .then(data => {
         // Vérification si la requête s'est bien passée
@@ -47,7 +47,7 @@ export default function Profile() {
   const handleValidate = async () => {
     try {
       // Envoi des données modifiées au backend
-      const res = await fetch("http://localhost/backend/parking_app/update_profile.php", {
+      const res = await fetch("http://juju.rf.gd/backend/parking_app/update_profile.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData), // Envoi du formulaire en JSON
