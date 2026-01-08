@@ -1,6 +1,6 @@
 // src/pages/Maintenance.jsx
 import { useParking } from "../context/ParkingContext";
-import "./../styles/Maintenance.css";
+import "../styles/Maintenance.css";
 
 export default function Maintenance() {
   const { spots, toggleSensor } = useParking();
