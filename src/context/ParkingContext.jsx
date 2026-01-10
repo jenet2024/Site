@@ -27,7 +27,7 @@ const toggleSensor = async (id) => {
         technicianId: spot.technicienId || "T000",
       };
 
-      const res = await fetch("http://localhost/backend/parkings_app/maintenance_api.php", {
+      const res = await fetch("api/maintenance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updated),
