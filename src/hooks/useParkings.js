@@ -5,7 +5,7 @@ export default function useParkings() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("api/parkings")
+    fetch("/api/parkings")
       .then((res) => res.json())
       .then((data) => {
         setParkings(data);

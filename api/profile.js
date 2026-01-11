@@ -20,7 +20,7 @@ export default async function handler(req, res) {
           
               host: "centerbeam.proxy.rlwy.net",
               user: "root",
-              password: "tGAjVyLzpNnyyfIqOsjjxOGCwkRLVzcK",
+              password: "tGAjVyLzpNnyyfIqOsjjxOGCwkRLVzcK",  
               database: "railway",
               port: 23185,
           });
