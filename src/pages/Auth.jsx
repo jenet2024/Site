@@ -20,12 +20,26 @@ export default function Auth() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const payload = { ...form, mode };
+    // 🔹 Construction du payload selon le mode
+    let payload = {
+      email: form.email,
+      password: form.password,
+      mode,
+    };
+
+    if (mode === "signup") {
+      payload = {
+        ...payload,
+        name: form.name,
+        street: form.street,
+        city: form.city,
+        postalCode: form.postalCode,
+      };
+    }
 
     try {
       console.log("Payload envoyé:", payload);
 
-      // 🔹 Envoi vers ton backend Node.js sur Vercel
       const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -36,12 +50,8 @@ export default function Auth() {
       console.log("Réponse backend:", data);
 
       if (data.success) {
-        // 🔹 Sauvegarde l'identifiant utilisateur
         localStorage.setItem("user_id", data.user_id);
-
         alert(data.message);
-
-        // 🔹 Redirection vers la page Profil
         navigate("/Profile");
       } else {
         alert(data.message);
