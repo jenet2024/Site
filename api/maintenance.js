@@ -15,13 +15,16 @@ export default async function handler(req, res) {
 
   // --- Connexion MySQL ---
   let conn;
-  try {
-    conn = await mysql.createConnection({
-      host: "sql111.infinityfree.com",
-      user: "if0_40859866",
-      password: "xLJoUIUXXE",
-      database: "if0_40859866_SmartPark",
-    });
+ try {
+         conn = await mysql.createConnection({
+         
+             host: "centerbeam.proxy.rlwy.net",
+             user: "root",
+             password: "tGAjVyLzpNnyyfIqOsjjxOGCwkRLVzcK",
+             database: "railway",
+             port: 23185,
+         });
+ 
   } catch (err) {
     res.status(500).json({ success: false, message: "Connexion MySQL échouée" });
     return;
