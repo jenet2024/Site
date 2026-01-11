@@ -6,7 +6,6 @@ import "../styles/maintenance.css";
 export default function Maintenance() {
   const { spots, toggleSensor } = useParking();
 
-  // Stocke les maintenances venant du backend
   const [maintenances, setMaintenances] = useState([]);
 
   // Charger les maintenances depuis l’API
@@ -16,7 +15,7 @@ export default function Maintenance() {
         const res = await fetch("/api/maintenance");
         const data = await res.json();
 
-        if (data.success) {
+        if (data.success && Array.isArray(data.maintenances)) {
           setMaintenances(data.maintenances);
         }
       } catch (err) {
@@ -28,14 +27,14 @@ export default function Maintenance() {
   }, []);
 
   // Envoyer une maintenance au backend
-  async function sendMaintenance(parkingName, sensorState, technicianId) {
+  async function sendMaintenance(parkingName, newSensorState, technicianId) {
     try {
       await fetch("/api/maintenance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           parkingName,
-          sensorState,
+          sensorState: newSensorState,
           technicianId,
         }),
       });
@@ -44,67 +43,67 @@ export default function Maintenance() {
     }
   }
 
-  // Détermine la couleur de la carte
-  const getCardColor = (sensorOk) => {
-    return sensorOk ? "green" : "orange-dark";
-  };
+  const getCardColor = (sensorOk) => (sensorOk ? "green" : "orange-dark");
 
   return (
     <main className="container">
       <h2>Maintenance des capteurs</h2>
 
       <div className="cards-grid">
-        {spots.map(({ id, nomParking, sensorOk, dateReparation, technicienId }) => {
-          const color = getCardColor(sensorOk);
+        {Array.isArray(spots) &&
+          spots.map(({ id, nomParking, sensorOk, dateReparation, technicienId }) => {
+            const color = getCardColor(sensorOk);
 
-          return (
-            <div key={id} className={`card-maintenance ${color}`}>
-              <h4>{nomParking || `Parking #${id}`}</h4>
+            return (
+              <div key={id} className={`card-maintenance ${color}`}>
+                <h4>{nomParking || `Parking #${id}`}</h4>
 
-              <p>
-                <strong>Capteur :</strong>{" "}
-                {sensorOk ? "✅ OK" : "⚠️ Défaillant"}
-              </p>
-
-              {!sensorOk && dateReparation && (
                 <p>
-                  <strong>Date réparation :</strong> {dateReparation}
+                  <strong>Capteur :</strong>{" "}
+                  {sensorOk ? "✅ OK" : "⚠️ Défaillant"}
                 </p>
-              )}
 
-              <p>
-                <strong>Technicien :</strong>{" "}
-                {technicienId ? `#${technicienId}` : "N/A"}
-              </p>
+                {!sensorOk && dateReparation && (
+                  <p>
+                    <strong>Date réparation :</strong> {dateReparation}
+                  </p>
+                )}
 
-              <small className="mini-desc">
-                {sensorOk
-                  ? "Capteur opérationnel, aucune intervention nécessaire."
-                  : "Capteur en panne, intervention prévue."}
-              </small>
+                <p>
+                  <strong>Technicien :</strong>{" "}
+                  {technicienId ? `#${technicienId}` : "N/A"}
+                </p>
 
-              <button
-                className="btn-outlined"
-                onClick={() => {
-                  // 1. Basculer l’état local
-                  toggleSensor(id);
+                <small className="mini-desc">
+                  {sensorOk
+                    ? "Capteur opérationnel, aucune intervention nécessaire."
+                    : "Capteur en panne, intervention prévue."}
+                </small>
 
-                  // 2. Enregistrer la maintenance dans MySQL via l’API
-                  sendMaintenance(
-                    nomParking || `Parking #${id}`,
-                    sensorOk ? "OK" : "DEFAILLANT",
-                    technicienId || 1
-                  );
-                }}
-              >
-                🔄 Basculer l'état du capteur
-              </button>
-            </div>
-          );
-        })}
+                <button
+                  className="btn-outlined"
+                  onClick={() => {
+                    // 1. Calculer le nouvel état
+                    const newState = sensorOk ? "DEFAILLANT" : "OK";
+
+                    // 2. Mettre à jour localement
+                    toggleSensor(id);
+
+                    // 3. Envoyer au backend
+                    sendMaintenance(
+                      nomParking || `Parking #${id}`,
+                      newState,
+                      technicienId || 1
+                    );
+                  }}
+                >
+                  🔄 Basculer l'état du capteur
+                </button>
+              </div>
+            );
+          })}
       </div>
 
-      {/* Affichage des maintenances venant du backend */}
       <section className="maintenance-history">
         <h3>Historique des maintenances</h3>
 
