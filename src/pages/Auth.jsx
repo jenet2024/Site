@@ -20,26 +20,12 @@ export default function Auth() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 🔹 Construction du payload selon le mode
-    let payload = {
-      email: form.email,
-      password: form.password,
-      mode,
-    };
-
-    if (mode === "signup") {
-      payload = {
-        ...payload,
-        name: form.name,
-        street: form.street,
-        city: form.city,
-        postalCode: form.postalCode,
-      };
-    }
+    const payload = { ...form, mode };
 
     try {
       console.log("Payload envoyé:", payload);
 
+      // 🔹 Envoi vers ton backend Node.js sur Vercel
       const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -50,8 +36,12 @@ export default function Auth() {
       console.log("Réponse backend:", data);
 
       if (data.success) {
+        // 🔹 Sauvegarde l'identifiant utilisateur
         localStorage.setItem("user_id", data.user_id);
+
         alert(data.message);
+
+        // 🔹 Redirection vers la page Profil
         navigate("/Profile");
       } else {
         alert(data.message);
@@ -65,6 +55,8 @@ export default function Auth() {
   return (
     <main className="auth-container">
       <div className={`auth-card ${mode}`}>
+        
+        {/* 🔹 Onglets Connexion / Inscription */}
         <div className="tabs">
           <button
             className={mode === "login" ? "active" : ""}
@@ -81,7 +73,10 @@ export default function Auth() {
           </button>
         </div>
 
+        {/* Formulaire */}
         <form onSubmit={handleSubmit} className="auth-form">
+
+          {/* 🔹 Champs visibles uniquement en mode Inscription */}
           {mode === "signup" && (
             <>
               <div className="field">
@@ -138,6 +133,7 @@ export default function Auth() {
             </>
           )}
 
+          {/* 🔹 Email */}
           <div className="field">
             <label>Email</label>
             <input
@@ -149,6 +145,7 @@ export default function Auth() {
             />
           </div>
 
+          {/* 🔹 Mot de passe */}
           <div className="field">
             <label>Mot de passe</label>
             <input
@@ -162,6 +159,7 @@ export default function Auth() {
             />
           </div>
 
+          {/* 🔹 Bouton */}
           <button type="submit" className="btn-primary">
             {mode === "login" ? "Se connecter" : "Créer un compte"}
           </button>
