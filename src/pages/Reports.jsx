@@ -13,18 +13,24 @@ export default function Reports() {
   const [selectedParking, setSelectedParking] = useState("");
   const [problem, setProblem] = useState("");
 
-  // Charger les parkings depuis /api/parkings
-  useEffect(() => {
-    fetch("/api/parkings")
-      .then((r) => r.json())
-      .then((data) => setParkings(data))
-      .catch((err) => console.error("Erreur parkings:", err));
-  }, []);
-
   const iconParking = new L.Icon({
     iconUrl: "https://maps.google.com/mapfiles/ms/icons/orange-dot.png",
     iconSize: [32, 32],
   });
+
+  // Charger les parkings depuis /api/parkings
+  useEffect(() => {
+    fetch("/api/parkings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.parkings)) {
+          setParkings(data.parkings);
+        } else {
+          console.error("Format inattendu des parkings:", data);
+        }
+      })
+      .catch((err) => console.error("Erreur parkings:", err));
+  }, []);
 
   // Ajouter un signalement
   const handleAddReport = async () => {
@@ -36,8 +42,14 @@ export default function Reports() {
     const parking = parkings.find((p) => p.nom === selectedParking);
     if (!parking) return;
 
+    const user_id = localStorage.getItem("user_id");
+    if (!user_id) {
+      alert("Vous devez être connecté pour signaler un problème.");
+      return;
+    }
+
     const payload = {
-      user_id: localStorage.getItem("user_id"),
+      user_id,
       title: `Problème au parking ${parking.nom}`,
       description: problem,
       latitude: parking.lat,
@@ -57,10 +69,11 @@ export default function Reports() {
         alert("Signalement enregistré !");
         loadReports();
       } else {
-        alert("Erreur: " + data.message);
+        alert("Erreur: " + (data.error || data.message));
       }
     } catch (err) {
       console.error("Erreur:", err);
+      alert("Erreur serveur lors de l'enregistrement.");
     }
 
     setSelectedParking("");
@@ -69,42 +82,41 @@ export default function Reports() {
 
   // Charger les signalements depuis /api/reports
   const loadReports = async () => {
-  try {
-    const user_id = localStorage.getItem("user_id");
+    try {
+      const user_id = localStorage.getItem("user_id");
+      if (!user_id) {
+        alert("Vous devez être connecté pour voir vos signalements.");
+        return;
+      }
 
-    if (!user_id) {
-      alert("Vous devez être connecté pour voir vos signalements.");
-      return;
+      const res = await fetch(`/api/reports?user_id=${user_id}`);
+      const data = await res.json();
+
+      if (data.success && Array.isArray(data.reports)) {
+        const formatted = data.reports.map((r) => ({
+          id: r.id,
+          lieu: r.title,
+          description: r.description,
+          coords: [r.latitude, r.longitude],
+        }));
+
+        setReports(formatted);
+      } else {
+        console.error("Format inattendu des reports:", data);
+      }
+    } catch (err) {
+      console.error("Erreur chargement reports:", err);
     }
-
-    const res = await fetch(`/api/reports?user_id=${user_id}`);
-    const data = await res.json();
-
-    if (data.success && Array.isArray(data.reports)) {
-      const formatted = data.reports.map((r) => ({
-        id: r.id,
-        lieu: r.title,
-        description: r.description,
-        coords: [r.latitude, r.longitude],
-      }));
-
-      setReports(formatted);
-    }
-  } catch (err) {
-    console.error("Erreur chargement reports:", err);
-  }
-};
-
+  };
 
   useEffect(() => {
     loadReports();
   }, []);
 
-  // Suppression locale (pas encore backend)
+  // Supprimer un signalement
   const handleDelete = async (id) => {
     setReports(reports.filter((r) => r.id !== id));
 
-    // Suppression dans la base
     try {
       await fetch("/api/reports", {
         method: "DELETE",
