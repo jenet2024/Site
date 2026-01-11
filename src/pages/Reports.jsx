@@ -69,26 +69,32 @@ export default function Reports() {
 
   // Charger les signalements depuis /api/reports
   const loadReports = async () => {
-    try {
-      const user_id = localStorage.getItem("user_id");
+  try {
+    const user_id = localStorage.getItem("user_id");
 
-      const res = await fetch(`/api/reports?user_id=${user_id}`);
-      const data = await res.json();
-
-      if (Array.isArray(data)) {
-        const formatted = data.map((r) => ({
-          id: r.id,
-          lieu: r.title,
-          description: r.description,
-          coords: [r.latitude, r.longitude],
-        }));
-
-        setReports(formatted);
-      }
-    } catch (err) {
-      console.error("Erreur chargement reports:", err);
+    if (!user_id) {
+      alert("Vous devez être connecté pour voir vos signalements.");
+      return;
     }
-  };
+
+    const res = await fetch(`/api/reports?user_id=${user_id}`);
+    const data = await res.json();
+
+    if (data.success && Array.isArray(data.reports)) {
+      const formatted = data.reports.map((r) => ({
+        id: r.id,
+        lieu: r.title,
+        description: r.description,
+        coords: [r.latitude, r.longitude],
+      }));
+
+      setReports(formatted);
+    }
+  } catch (err) {
+    console.error("Erreur chargement reports:", err);
+  }
+};
+
 
   useEffect(() => {
     loadReports();

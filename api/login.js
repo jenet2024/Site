@@ -109,9 +109,6 @@ export default async function handler(req, res) {
       return;
     }
 
-    // ---------------------------------------------------------
-    // 🔹 Mode invalide
-    // ---------------------------------------------------------
     res.status(400).json({
       success: false,
       message: "Mode invalide",
