@@ -1,3 +1,15 @@
+
+
+
+
+
+
+
+
+
+
+
+
 import mysql from "mysql2/promise";
 
 export default async function handler(req, res) {
@@ -12,21 +24,15 @@ export default async function handler(req, res) {
     return;
   }
 
-  // --- Connexion MySQL ---
-  let conn;
-  try {
-    conn = await mysql.createConnection({
-      host: "sql111.infinityfree.com",
-      user: "if0_40859866",
-      password: "xLJoUIUXXE",
-      database: "if0_40859866_SmartPark",
-    });
-  } catch (err) {
-    res.status(500).json({ error: "Connexion MySQL échouée", details: err.message });
-    return;
-  }
+  // Connexion MySQL
+  const conn = await mysql.createConnection({
+    host: "sql111.infinityfree.com",
+    user: "if0_40859866",
+    password: "xLJoUIUXXE",
+    database: "if0_40859866_SmartPark",
+  });
 
-  // --- Récupération user_id ---
+  // Récupération user_id (envoyé par React)
   const user_id = req.body?.user_id || req.query?.user_id;
 
   if (!user_id) {
