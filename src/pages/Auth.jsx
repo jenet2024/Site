@@ -65,8 +65,6 @@ export default function Auth() {
   return (
     <main className="auth-container">
       <div className={`auth-card ${mode}`}>
-        
-        {/* 🔹 Onglets Connexion / Inscription */}
         <div className="tabs">
           <button
             className={mode === "login" ? "active" : ""}
@@ -83,10 +81,7 @@ export default function Auth() {
           </button>
         </div>
 
-        {/* Formulaire */}
         <form onSubmit={handleSubmit} className="auth-form">
-
-          {/* 🔹 Champs visibles uniquement en mode Inscription */}
           {mode === "signup" && (
             <>
               <div className="field">
@@ -143,7 +138,6 @@ export default function Auth() {
             </>
           )}
 
-          {/* 🔹 Email */}
           <div className="field">
             <label>Email</label>
             <input
@@ -155,7 +149,6 @@ export default function Auth() {
             />
           </div>
 
-          {/* 🔹 Mot de passe */}
           <div className="field">
             <label>Mot de passe</label>
             <input
@@ -169,7 +162,6 @@ export default function Auth() {
             />
           </div>
 
-          {/* 🔹 Bouton */}
           <button type="submit" className="btn-primary">
             {mode === "login" ? "Se connecter" : "Créer un compte"}
           </button>
